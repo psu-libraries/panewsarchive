@@ -35,7 +35,7 @@ Markdown Spec](https://github.github.com/gfm/).
 ### Added
 
 ### Changed
-
+ - pinned solrpy version to fix issue with v1.0.0
 ### Removed
 
 ### Migration
