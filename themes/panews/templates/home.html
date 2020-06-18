@@ -1,0 +1,23 @@
+<!-- http://BASE_URI/ -->
+
+{% extends "__l_main.html" %}
+
+{% load static from staticfiles %}
+{% load humanize %}
+{% load image_urls %}
+ 
+{% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <h2>Welcome to the {{ project_name }}</h2>
+<p>The Pennsylvania Newspaper Archive is developed by the <a href="http://libraries.psu.edu">Penn State University Libraries</a>, in collaboration with partner institutions in the state, including the 
+<a href="http://www.statelibrary.pa.gov/">State Library of Pennsylvania</a>, the 
+<a href="http://www.freelibrary.org/">Free Library of Philadelphia</a>, 
+<a href="http://guides.library.bloomu.edu/">Bloomsburg University Library</a>, 
+<a href="http://www.juniata.edu/academics/library/">Juniata College</a>, and the 
+<a href="http://www.phmc.pa.gov/">Pennsylvania Historical and Museum Commission</a>.</p>
+<p>This archive offers searchable full-text access to more than 80 historically significant newspaper titles from the Commonwealth.</p>
+<p>The Pennsyvlania Newspaper Archive was made possible thanks, in part, to the National Endowment for the Humanities and the Library of Congress.</p>
+</div> <!-- /col-md-12 -->
+</div><!-- /row -->
+{% endblock content %}
