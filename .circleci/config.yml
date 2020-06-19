@@ -1,19 +1,18 @@
 version: 2.1
 
 jobs:
-  build:
+  build-vanilla:
     docker:
       - image: psul/docker-compose-ci
     environment:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       REGISTRY_URL: harbor.k8s.libraries.psu.edu/library/pana
       DOCKER_USERNAME: 'robot$circleci'
+      TAG_PREFIX: vanilla-
     steps:
     - setup_remote_docker:
         docker_layer_caching: false
     - checkout
-    - environment:
-        TAG_PREFIX: vanilla-
     - run:
         name: "Build Container"
         command: |
@@ -25,8 +24,17 @@ jobs:
           docker tag $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BRANCH $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BUILD_NUM
           docker push $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BRANCH
           docker push $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BUILD_NUM
-    - environment:
-        TAG_PREFIX: pana-
+  build-pana:
+    docker:
+      - image: psul/docker-compose-ci
+    environment:
+      REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+      REGISTRY_URL: harbor.k8s.libraries.psu.edu/library/pana
+      DOCKER_USERNAME: 'robot$circleci'
+      TAG_PREFIX: pana-
+    steps:
+    - setup_remote_docker:
+        docker_layer_caching: false
     - run:
         name: "Build Container"
         command: |
@@ -41,4 +49,5 @@ workflows:
   version: 2
   pana:
     jobs:
-      - build
+      - build-vanilla
+      - build-pana
