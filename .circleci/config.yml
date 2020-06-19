@@ -5,8 +5,8 @@ jobs:
     docker:
       - image: psul/docker-compose-ci
     environment:
-      REGISTRY_HOST: harbor.dsrd.libraries.psu.edu
-      REGISTRY_URL: harbor.dsrd.libraries.psu.edu/library/pana
+      REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+      REGISTRY_URL: harbor.k8s.libraries.psu.edu/library/pana
       DOCKER_USERNAME: 'robot$circleci'
     steps:
     - setup_remote_docker:
