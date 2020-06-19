@@ -34,7 +34,7 @@ RUN git clone https://github.com/open-oni/open-oni.git /opt/openoni
 
 # stage entrypoint script
 RUN ln -s /opt/openoni/entrypoint.sh /entrypoint.sh
-RUN chmod u+x /entrypoint.sh
+RUN chmod u+x /opt/openoni/entrypoint.sh
 
 RUN echo "/usr/local/bin/manage delete_cache" > /etc/cron.daily/delete_cache
 RUN chmod u+x /etc/cron.daily/delete_cache
