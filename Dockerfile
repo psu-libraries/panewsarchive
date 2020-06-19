@@ -30,7 +30,7 @@ RUN a2dissite 000-default.conf
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 # setup base code
 WORKDIR /opt/openoni
-RUN git clone git@github.com:open-oni/open-oni.git /opt/openoni
+RUN git clone https://github.com/open-oni/open-oni.git /opt/openoni
 
 # stage entrypoint script
 ADD openoni/entrypoint.sh /
