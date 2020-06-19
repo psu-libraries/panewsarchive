@@ -12,17 +12,31 @@ jobs:
     - setup_remote_docker:
         docker_layer_caching: false
     - checkout
+    - environment:
+        TAG_PREFIX: vanilla-
     - run:
         name: "Build Container"
         command: |
-          docker build -t $REGISTRY_URL:vanilla-$CIRCLE_BRANCH .
+          docker build -t $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BRANCH .
     - run:
-        name: "Publishing the vanilla image"
+        name: "Publishing the Vanilla ONI Image"
         command: |
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $REGISTRY_HOST
-          docker tag $REGISTRY_URL:vanilla-$CIRCLE_BRANCH $REGISTRY_URL:vanilla-$CIRCLE_BUILD_NUM
-          docker push $REGISTRY_URL:vanilla-$CIRCLE_BRANCH
-          docker push $REGISTRY_URL:vanilla-$CIRCLE_BUILD_NUM
+          docker tag $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BRANCH $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BUILD_NUM
+          docker push $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BRANCH
+          docker push $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BUILD_NUM
+    - environment:
+        TAG_PREFIX: pana-
+    - run:
+        name: "Build Container"
+        command: |
+          docker build -f Dockerfile-pana -t $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BRANCH .
+    - run:
+        name: "Publishing the PANA Image"
+        command: |
+          docker tag $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BRANCH $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BUILD_NUM
+          docker push $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BRANCH
+          docker push $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BUILD_NUM
 workflows:
   version: 2
   pana:
