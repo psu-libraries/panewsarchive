@@ -1,0 +1,30 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: psul/docker-compose-ci
+    environment:
+      REGISTRY_HOST: harbor.dsrd.libraries.psu.edu
+      REGISTRY_URL: harbor.dsrd.libraries.psu.edu/library/pana
+      DOCKER_USERNAME: 'robot$circleci'
+    steps:
+    - setup_remote_docker:
+        docker_layer_caching: false
+    - checkout
+    - run:
+        name: "Build Container"
+        command: |
+          docker build -t $REGISTRY_URL:$CIRCLE_BRANCH .
+    - run:
+        name: "Publishing the image"
+        command: |
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $REGISTRY_HOST
+          docker tag $REGISTRY_URL:$CIRCLE_BRANCH $REGISTRY_URL:$CIRCLE_BUILD_NUM
+          docker push $REGISTRY_URL:$CIRCLE_BRANCH
+          docker push $REGISTRY_URL:$CIRCLE_BUILD_NUM
+workflows:
+  version: 2
+  pana:
+    jobs:
+      - build
