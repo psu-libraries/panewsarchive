@@ -33,7 +33,6 @@ WORKDIR /opt/openoni
 RUN git clone https://github.com/open-oni/open-oni.git /opt/openoni
 
 # stage entrypoint script
-ADD openoni/entrypoint.sh /
 RUN ln -s /opt/openoni/entrypoint.sh /entrypoint.sh
 RUN chmod u+x /entrypoint.sh
 
