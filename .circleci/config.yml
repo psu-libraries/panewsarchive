@@ -15,14 +15,14 @@ jobs:
     - run:
         name: "Build Container"
         command: |
-          docker build -t $REGISTRY_URL:$CIRCLE_BRANCH .
+          docker build -t $REGISTRY_URL:vanilla-$CIRCLE_BRANCH .
     - run:
-        name: "Publishing the image"
+        name: "Publishing the vanilla image"
         command: |
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $REGISTRY_HOST
-          docker tag $REGISTRY_URL:$CIRCLE_BRANCH $REGISTRY_URL:$CIRCLE_BUILD_NUM
-          docker push $REGISTRY_URL:$CIRCLE_BRANCH
-          docker push $REGISTRY_URL:$CIRCLE_BUILD_NUM
+          docker tag $REGISTRY_URL:vanilla-$CIRCLE_BRANCH $REGISTRY_URL:vanilla-$CIRCLE_BUILD_NUM
+          docker push $REGISTRY_URL:vanilla-$CIRCLE_BRANCH
+          docker push $REGISTRY_URL:vanilla-$CIRCLE_BUILD_NUM
 workflows:
   version: 2
   pana:
