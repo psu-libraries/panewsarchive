@@ -15,6 +15,7 @@ RUN apt-get update && \
   curl \
   rsync \
   python3-dev \
+  python3-venv \
   python3-pip && \
   apt-get -y install --no-install-recommends libapache2-mod-wsgi-py3
 
@@ -40,4 +41,5 @@ RUN echo "/usr/local/bin/manage delete_cache" > /etc/cron.daily/delete_cache
 RUN chmod u+x /etc/cron.daily/delete_cache
 
 EXPOSE 80
-ENTRYPOINT /entrypoint.sh
+ENTRYPOINT ./docker/entrypoint.sh
+# cmd ["/bin/sleep", "infinity"]

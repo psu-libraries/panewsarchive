@@ -1,0 +1,3 @@
+[submodule "open-oni"]
+	path = open-oni
+	url = https://github.com/open-oni/open-oni

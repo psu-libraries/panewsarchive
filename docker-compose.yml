@@ -29,10 +29,12 @@ services:
       - ./data/batches:/opt/openoni/data/batches:z
   web:
     build:
-      context: ./docker
-      dockerfile: Dockerfile-dev
+      context: .
+      dockerfile: Dockerfile
     volumes:
-      - ./:/opt/openoni:z
+      - ./open-oni:/opt/openoni:z
+      - ./themes/panews:/opt/openoni/themes/panews:z
+      - ./config/settings_local.py:/opt/openoni/onisite/settings_local.py:z
     ports:
       - ${HTTPPORT:-80}:80
     depends_on:

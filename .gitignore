@@ -2,6 +2,7 @@
 ENV
 onisite/settings_local.py
 onisite/urls.py
+open-oni
 *.log
 data/batches
 data/ocr
