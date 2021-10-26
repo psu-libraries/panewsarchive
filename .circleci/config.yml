@@ -28,6 +28,8 @@ jobs:
     docker:
       - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
         user: root
+    environment:
+      DOCKER_LOGIN: 'robot$circleci'
     steps:
       - setup_remote_docker:
           version: 19.03.13
