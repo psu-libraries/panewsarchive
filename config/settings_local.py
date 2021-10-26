@@ -15,6 +15,22 @@ BASE_URL = os.getenv('ONI_BASE_URL', 'http://localhost')
 url = urllib.parse.urlparse(BASE_URL)
 ALLOWED_HOSTS = [url.hostname, '*']
 
+PROJECT_NAME = os.getenv('PROJECT_NAME', 'Pennsylvania Newspaper Archive')
+SITE_TITLE = os.getenv('SITE_TITLE', 'Pennsylvania Newspaper Archive')
+
+
+
+
+MIDDLEWARE = (
+    'django.middleware.security.SecurityMiddleware', 'whitenoise.middleware.WhiteNoiseMiddleware', 'core.middleware.TooBusyMiddleware', 'django.middleware.http.ConditionalGetMiddleware', 'django.contrib.sessions.middleware.SessionMiddleware', 'django.middleware.common.CommonMiddleware', 'django.middleware.csrf.CsrfViewMiddleware', 'django.contrib.messages.middleware.MessageMiddleware', 'django.middleware.clickjacking.XFrameOptionsMiddleware'
+)
+
+
+# STATIC_URL = 'static/compiled/'
+
+
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 if url.scheme == 'https':
     """
     Enable HSTS by setting ONI_HSTS_SECONDS > 0.
@@ -33,18 +49,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Humanize and local theme override all below
-    'django.contrib.humanize',  # Makes data more human-readable
-
-    # Plugins
-    # See https://github.com/open-oni?q=plugin for available plugins
-
-    # Open ONI
-    # Extend the default theme by including your own above themes.default
-    # 'themes.YOUR_THEME_NAME',
+    'django.contrib.humanize',
     'themes.default',
-    # 'themes.panews',
     'core',
 )
 
@@ -72,8 +78,6 @@ descriptions that will only show up occasionally.
 For example: 'Open ONI' for most headers, 'Open Online Newspapers Initiative'
 for introduction / about / further information / etc
 """
-SITE_TITLE = 'YOUR_SHORT_PROJECT_NAME'
-PROJECT_NAME = 'YOUR_LONG_PROJECT_NAME'
 
 """
 Use below only if LoC is down and MARC requests fail.

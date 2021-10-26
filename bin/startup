@@ -1,0 +1,12 @@
+#!/bin/bash
+# fire up this thing 
+
+if [ -f /vault/secrets/config ]; then 
+  . /vault/secrets/config
+fi
+
+python manage.py setup_index
+python manage.py collectstatic --noinput
+python manage.py migrate
+
+gunicorn onisite.wsgi -b 0.0.0.0
