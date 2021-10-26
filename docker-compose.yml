@@ -38,7 +38,7 @@ services:
       - ./config/settings_local.py:/open-oni/onisite/settings_local.py
       - ./data/batches:/open-oni/data/batches
     ports:
-      - "8000:8000"
+      - "${HTTPPORT:-8081}:8000"
     depends_on:
       - rdbms
     environment:
