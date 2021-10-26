@@ -1,55 +1,96 @@
 version: 2.1
 
+orbs:
+  docker: circleci/docker@1.5.0
+
 jobs:
-  build-vanilla:
+  release:
     docker:
-      - image: psul/docker-compose-ci
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
     environment:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
-      REGISTRY_URL: harbor.k8s.libraries.psu.edu/library/pana
+      REGISTRY_REPO: library/panewsarchive
       DOCKER_USERNAME: 'robot$circleci'
-      TAG_PREFIX: vanilla-
+      GITHUB_USER: 'psu-stewardship-bot'
+      CONFIG_REPO: git@github.com:psu-libraries/panewsarchive-config.git
     steps:
-    - setup_remote_docker:
-        docker_layer_caching: false
-    - checkout
-    - run:
-        name: "Build Container"
-        command: |
-          docker build -t $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BRANCH .
-    - run:
-        name: "Publishing the Vanilla ONI Image"
-        command: |
-          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $REGISTRY_HOST
-          docker tag $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BRANCH $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BUILD_NUM
-          docker push $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BRANCH
-          docker push $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BUILD_NUM
-  build-pana:
+      - add_ssh_keys
+      - run:
+          name: "Release"
+          command: |
+            /usr/local/bin/tag-image
+            ssh-keyscan github.com > ~/.ssh/known_hosts
+            git clone $CONFIG_REPO
+            cd panewsarchive-config
+            /usr/local/bin/pr-release clusters/prod/manifests/panewsarchive/prod.yaml
+
+  publish:
     docker:
-      - image: psul/docker-compose-ci
-    environment:
-      REGISTRY_HOST: harbor.k8s.libraries.psu.edu
-      REGISTRY_URL: harbor.k8s.libraries.psu.edu/library/pana
-      DOCKER_USERNAME: 'robot$circleci'
-      TAG_PREFIX: pana-
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
+        user: root
     steps:
-    - setup_remote_docker:
-        docker_layer_caching: false
-    - checkout
-    - run:
-        name: "Build Container"
-        command: |
-          docker build -f Dockerfile-pana -t $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BRANCH .
-    - run:
-        name: "Publishing the PANA Image"
-        command: |
-          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $REGISTRY_HOST
-          docker tag $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BRANCH $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BUILD_NUM
-          docker push $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BRANCH
-          docker push $REGISTRY_URL:$TAG_PREFIX$CIRCLE_BUILD_NUM
+      - setup_remote_docker:
+          version: 19.03.13
+      - checkout
+      - docker/check:
+          registry: harbor.k8s.libraries.psu.edu
+      - docker/build:
+          image: library/panewsarchive
+          registry: harbor.k8s.libraries.psu.edu
+          extra_build_args: "--target production"
+      - docker/push:
+          digest-path: /tmp/digest.txt
+          image: library/panewsarchive
+          registry: harbor.k8s.libraries.psu.edu
+      - run:
+          command: |
+            echo "Digest is: $(</tmp/digest.txt)"
+  deploy:
+    docker:
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
+    environment:
+      CONFIG_REPO: git@github.com:psu-libraries/panewsarchive-config.git
+    steps:
+      - add_ssh_keys
+      - run:
+          name: "Updating Config Repo"
+          command: |
+            ssh-keyscan github.com > ~/.ssh/known_hosts
+            git clone $CONFIG_REPO
+            cd panewsarchive-config
+            ./bin/generate_app
+
 workflows:
   version: 2
-  pana:
+  panewsarchive:
     jobs:
-      - build-vanilla
-      - build-pana
+      - release:
+          context:
+            - org-global
+          name: "release image"
+          filters:
+            tags:
+              only:
+                - /^v\d+.\d+.\d+.*/
+            branches:
+              ignore:
+                - /.*/
+      - publish:
+          context:
+            - org-global
+          filters:
+            branches:
+              only:
+                - main
+                - /preview\/.*/
+      - deploy:
+          context:
+            - org-global
+          requires:
+            - publish
+          filters:
+            branches:
+              only:
+                - main
+                - /preview\/.*/
+

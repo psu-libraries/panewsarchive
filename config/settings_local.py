@@ -15,21 +15,10 @@ BASE_URL = os.getenv('ONI_BASE_URL', 'http://localhost')
 url = urllib.parse.urlparse(BASE_URL)
 ALLOWED_HOSTS = [url.hostname, '*']
 
-PROJECT_NAME = os.getenv('PROJECT_NAME', 'Pennsylvania Newspaper Archive')
-SITE_TITLE = os.getenv('SITE_TITLE', 'Pennsylvania Newspaper Archive')
-
-
-
 
 MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware', 'whitenoise.middleware.WhiteNoiseMiddleware', 'core.middleware.TooBusyMiddleware', 'django.middleware.http.ConditionalGetMiddleware', 'django.contrib.sessions.middleware.SessionMiddleware', 'django.middleware.common.CommonMiddleware', 'django.middleware.csrf.CsrfViewMiddleware', 'django.contrib.messages.middleware.MessageMiddleware', 'django.middleware.clickjacking.XFrameOptionsMiddleware'
 )
-
-
-# STATIC_URL = 'static/compiled/'
-
-
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 if url.scheme == 'https':
     """
@@ -78,6 +67,9 @@ descriptions that will only show up occasionally.
 For example: 'Open ONI' for most headers, 'Open Online Newspapers Initiative'
 for introduction / about / further information / etc
 """
+
+PROJECT_NAME = os.getenv('PROJECT_NAME', 'Pennsylvania Newspaper Archive')
+SITE_TITLE = os.getenv('SITE_TITLE', 'Pennsylvania Newspaper Archive')
 
 """
 Use below only if LoC is down and MARC requests fail.
