@@ -82,6 +82,7 @@ workflows:
             branches:
               only:
                 - main
+                - docker-fixes
                 - /preview\/.*/
       - deploy:
           context:
