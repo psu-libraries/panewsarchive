@@ -39,7 +39,6 @@ jobs:
       - docker/build:
           image: library/panewsarchive
           registry: harbor.k8s.libraries.psu.edu
-          extra_build_args: "--target production"
       - docker/push:
           digest-path: /tmp/digest.txt
           image: library/panewsarchive
