@@ -1,45 +1,57 @@
-FROM ubuntu:bionic
+FROM python:3.9.6 
 
-RUN apt-get update && \
-  DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
-  apache2 \
-  ca-certificates \
-  gcc \
-  git \
-  libmysqlclient-dev \
-  libssl-dev \
-  libxml2-dev \
-  libxslt-dev \
-  libjpeg-dev \
-  mysql-client \
-  curl \
-  rsync \
-  python3-dev \
-  python3-venv \
-  python3-pip && \
-  apt-get -y install --no-install-recommends libapache2-mod-wsgi-py3
+WORKDIR /open-oni
 
-# Force apache error logs to stderr
-RUN ln -sf /proc/self/fd/1 /var/log/apache2/error.log
-# setup apache 
-RUN a2enmod cache cache_disk expires rewrite proxy_http ssl
-RUN mkdir -p /var/cache/httpd/mod_disk_cache
-RUN chown -R www-data:www-data /var/cache/httpd
-RUN a2dissite 000-default.conf
+RUN adduser app && \
+  mkdir -p /open-oni && \
+  chown -R app /open-oni
 
-# setup shell
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-# setup base code
-WORKDIR /opt/openoni
-RUN git clone https://github.com/open-oni/open-oni.git /opt/openoni
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  krb5-multidev=1.18.3-6+deb11u1 \
+  libapr1=1.7.0-6+deb11u1 \
+  libgssapi-krb5-2=1.18.3-6+deb11u1 \
+  libgssrpc4=1.18.3-6+deb11u1 \
+  libk5crypto3=1.18.3-6+deb11u1 \
+  libkadm5clnt-mit12=1.18.3-6+deb11u1 \
+  libkadm5srv-mit12=1.18.3-6+deb11u1 \
+  libkdb5-10=1.18.3-6+deb11u1 \
+  libkrb5-3=1.18.3-6+deb11u1 \
+  libkrb5-dev=1.18.3-6+deb11u1 \
+  libkrb5support0=1.18.3-6+deb11u1 \
+  libmariadb-dev-compat=1:10.5.12-0+deb11u1 \
+  libmariadb-dev=1:10.5.12-0+deb11u1 \
+  libmariadb3=1:10.5.12-0+deb11u1 \
+  libpq-dev=13.4-0+deb11u1 \
+  libpq5=13.4-0+deb11u1 \
+  libssl-dev=1.1.1k-1+deb11u1 \
+  libssl1.1=1.1.1k-1+deb11u1 \
+  linux-libc-dev=5.10.70-1 \
+  mariadb-common=1:10.5.12-0+deb11u1 \
+  openssl=1.1.1k-1+deb11u1 && \
+  rm -rf /var/lib/apt/lists/* 
 
-# stage entrypoint script
-RUN ln -s /opt/openoni/docker/entrypoint.sh /entrypoint.sh
-RUN chmod u+x /opt/openoni/docker/entrypoint.sh
+COPY bin/startup /usr/local/bin/startup
+RUN chmod +x /usr/local/bin/startup
 
-RUN echo "/usr/local/bin/manage delete_cache" > /etc/cron.daily/delete_cache
-RUN chmod u+x /etc/cron.daily/delete_cache
+USER app
 
-EXPOSE 80
-ENTRYPOINT ./docker/entrypoint.sh
-# cmd ["/bin/sleep", "infinity"]
+ENV PATH=$PATH:/home/app/.local/bin
+
+# Open-Oni Requirements
+COPY open-oni/requirements.lock /open-oni
+RUN pip install --no-cache-dir -r requirements.lock --user
+
+# Our requirements on top of Open-Oni
+COPY psu-requirements.txt /open-oni
+RUN pip install --no-cache-dir -r psu-requirements.txt --user
+
+COPY --chown=app open-oni /open-oni
+COPY --chown=app config/settings_local.py /open-oni/onisite
+COPY --chown=app config/urls.py /open-oni/onisite
+COPY --chown=app themes /open-oni/themes
+
+ADD --chown=app psu-custom/ /open-oni
+
+RUN ["python", "manage.py", "collectstatic", "--noinput"]
+
+CMD ["/usr/local/bin/startup"]

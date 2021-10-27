@@ -20,6 +20,8 @@ services:
       - openoni
   rais:
     image: uolibraries/rais
+    ports:
+      - "12415:12415"
     environment:
       - RAIS_IIIFURL=${ONI_IIIF_URL:-http://localhost/images/iiif}
       - RAIS_TILECACHELEN=250
@@ -32,17 +34,13 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./open-oni:/opt/openoni:z
-      - ./themes/panews:/opt/openoni/themes/panews:z
-      - ./config/settings_local.py:/opt/openoni/onisite/settings_local.py:z
+      - ./open-oni:/open-oni
+      - ./config/settings_local.py:/open-oni/onisite/settings_local.py
+      - ./data/batches:/open-oni/data/batches
     ports:
-      - ${HTTPPORT:-80}:80
+      - "${HTTPPORT:-8081}:8000"
     depends_on:
       - rdbms
-    links:
-      - rdbms
-      - solr
-      - rais
     environment:
       - APACHE_LOG_LEVEL=${APACHE_LOG_LEVEL:-warn}
       - ONI_BASE_URL
@@ -53,7 +51,7 @@ services:
       - ONI_DB_PASSWORD
       - ONI_DEBUG
       - ONI_HSTS_SECONDS
-      - ONI_IIIF_URL
+      - ONI_IIIF_URL=http://localhost:12415/iiif
       - ONI_LOG_SQL
       - ONI_LOG_TO_FILE
       - ONI_SECRET_KEY
