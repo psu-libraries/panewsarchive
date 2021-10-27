@@ -15,6 +15,7 @@ BASE_URL = os.getenv('ONI_BASE_URL', 'http://localhost')
 url = urllib.parse.urlparse(BASE_URL)
 ALLOWED_HOSTS = [url.hostname, '*']
 
+SOLR_CLOUD = True
 
 MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware', 'whitenoise.middleware.WhiteNoiseMiddleware', 'core.middleware.TooBusyMiddleware', 'django.middleware.http.ConditionalGetMiddleware', 'django.contrib.sessions.middleware.SessionMiddleware', 'django.middleware.common.CommonMiddleware', 'django.middleware.csrf.CsrfViewMiddleware', 'django.contrib.messages.middleware.MessageMiddleware', 'django.middleware.clickjacking.XFrameOptionsMiddleware'
