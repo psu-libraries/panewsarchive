@@ -49,4 +49,8 @@ COPY --chown=app open-oni /open-oni
 COPY --chown=app config/settings_local.py /open-oni/onisite
 COPY --chown=app themes /open-oni/themes
 
+ADD --chown=app psu-custom/ /open-oni
+
+RUN ["python", "manage.py", "collectstatic", "--noinput"]
+
 CMD ["/usr/local/bin/startup"]
