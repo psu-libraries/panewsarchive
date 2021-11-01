@@ -21,10 +21,6 @@ MIDDLEWARE = (
     'django.middleware.security.SecurityMiddleware', 'whitenoise.middleware.WhiteNoiseMiddleware', 'core.middleware.TooBusyMiddleware', 'django.middleware.http.ConditionalGetMiddleware', 'django.contrib.sessions.middleware.SessionMiddleware', 'django.middleware.common.CommonMiddleware', 'django.middleware.csrf.CsrfViewMiddleware', 'django.contrib.messages.middleware.MessageMiddleware', 'django.middleware.clickjacking.XFrameOptionsMiddleware'
 )
 
-STATICFILES_DIRS = [
-    "/open-oni/data/word_coordinates"
-]
-
 if url.scheme == 'https':
     """
     Enable HSTS by setting ONI_HSTS_SECONDS > 0.
