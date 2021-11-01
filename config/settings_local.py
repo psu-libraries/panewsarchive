@@ -93,12 +93,12 @@ Requires core.middleware.TooBusyMiddleware in MIDDLEWARE.
 TOO_BUSY_LOAD_AVERAGE = 64
 
 Q_CLUSTER = {
+    'workers': 1, 
+    'queue_limit': 1,
     'redis': {
         'host': os.environ.get('REDIS_HOST', 'localhost'),
         'port': os.environ.get('REDIS_PORT', 6379),
         'db': 0,
-        'workers': 1,
-        'queue_limit': 1,
         'password': None,
         'socket_timeout': None,
         'charset': 'utf-8',
