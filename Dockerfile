@@ -52,6 +52,6 @@ COPY --chown=app themes /open-oni/themes
 
 ADD --chown=app psu-custom/ /open-oni
 
-RUN ["python", "manage.py", "collectstatic", "--noinput"]
+#RUN ["python", "manage.py", "collectstatic", "--noinput"]
 
 CMD ["/usr/local/bin/startup"]
