@@ -15,11 +15,12 @@ BASE_URL = os.getenv('ONI_BASE_URL', 'http://localhost')
 url = urllib.parse.urlparse(BASE_URL)
 ALLOWED_HOSTS = [url.hostname, '*']
 
-SOLR_CLOUD = True
+SOLR_CLOUD = os.environ.get('ONI_SOLR_CLOUD', False)
 
-MIDDLEWARE = (
-    'django.middleware.security.SecurityMiddleware', 'whitenoise.middleware.WhiteNoiseMiddleware', 'core.middleware.TooBusyMiddleware', 'django.middleware.http.ConditionalGetMiddleware', 'django.contrib.sessions.middleware.SessionMiddleware', 'django.middleware.common.CommonMiddleware', 'django.middleware.csrf.CsrfViewMiddleware', 'django.contrib.messages.middleware.MessageMiddleware', 'django.middleware.clickjacking.XFrameOptionsMiddleware'
-)
+# Use default middlewares. uncomment if adding whitenoise back in
+# MIDDLEWARE = (
+#     'django.middleware.security.SecurityMiddleware', 'whitenoise.middleware.WhiteNoiseMiddleware', 'core.middleware.TooBusyMiddleware', 'django.middleware.http.ConditionalGetMiddleware', 'django.contrib.sessions.middleware.SessionMiddleware', 'django.middleware.common.CommonMiddleware', 'django.middleware.csrf.CsrfViewMiddleware', 'django.contrib.messages.middleware.MessageMiddleware', 'django.middleware.clickjacking.XFrameOptionsMiddleware'
+# )
 
 if url.scheme == 'https':
     """
@@ -42,6 +43,7 @@ INSTALLED_APPS = (
     'django.contrib.humanize',
     'themes.default',
     'core',
+    'django_q',
 )
 
 """
@@ -90,3 +92,21 @@ Open ONI will return a 'Server Too Busy' response. If unsure, leave at default.
 Requires core.middleware.TooBusyMiddleware in MIDDLEWARE.
 """
 TOO_BUSY_LOAD_AVERAGE = 64
+
+Q_CLUSTER = {
+    'max_attempts': 2,
+    'retry': 16500,
+    'timeout': 14400,
+    'workers': 1, 
+    'queue_limit': 1,
+    'redis': {
+        'host': os.environ.get('REDIS_HOST', 'localhost'),
+        'port': os.environ.get('REDIS_PORT', 6379),
+        'db': 0,
+        'password': None,
+        'socket_timeout': None,
+        'charset': 'utf-8',
+        'errors': 'strict',
+        'unix_socket_path': None
+    }
+}

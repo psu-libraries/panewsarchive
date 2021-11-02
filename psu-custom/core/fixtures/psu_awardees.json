@@ -1,0 +1,42 @@
+[
+    {
+        "pk": "p",
+        "model": "core.Awardee",
+        "fields": {
+            "name": "Pennsylvania State Library, Harrisburg, PA",
+            "created": "2075-07-25T00:00:00+00:00"
+        }
+    },
+    {
+        "pk": "padalbm",
+        "model": "core.Awardee",
+        "fields": {
+            "name": "Back Mountain Memorial Library",
+            "created": "2019-09-30T11:28:07+00:00"
+        }
+    },
+    {
+        "pk": "pameypl",
+        "model": "core.Awardee",
+        "fields": {
+            "name": "Meyersdale Public Library",
+            "created": "2019-05-13T15:57:46+00:00"
+        }
+    },
+    {
+        "pk": "pasyrhs",
+        "model": "core.Awardee",
+        "fields": {
+            "name": "Sayre Historical Society",
+            "created": "2020-12-18T18:24:25+00:00"
+        }
+    },
+    {
+        "pk": "pstma",
+        "model": "core.Awardee",
+        "fields": {
+            "name": "Pennsylvania State University, Mont Alto Campus",
+            "created": "1975-08-20T00:00:00+00:00"
+        }
+    }
+]
