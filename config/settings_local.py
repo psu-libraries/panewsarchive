@@ -95,7 +95,8 @@ TOO_BUSY_LOAD_AVERAGE = 64
 
 Q_CLUSTER = {
     'max_attempts': 2,
-    'retry': None,
+    'retry': 16500,
+    'timeout': 14400,
     'workers': 1, 
     'queue_limit': 1,
     'redis': {
