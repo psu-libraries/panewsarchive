@@ -17,9 +17,10 @@ ALLOWED_HOSTS = [url.hostname, '*']
 
 SOLR_CLOUD = os.environ.get('ONI_SOLR_CLOUD', False)
 
-MIDDLEWARE = (
-    'django.middleware.security.SecurityMiddleware', 'whitenoise.middleware.WhiteNoiseMiddleware', 'core.middleware.TooBusyMiddleware', 'django.middleware.http.ConditionalGetMiddleware', 'django.contrib.sessions.middleware.SessionMiddleware', 'django.middleware.common.CommonMiddleware', 'django.middleware.csrf.CsrfViewMiddleware', 'django.contrib.messages.middleware.MessageMiddleware', 'django.middleware.clickjacking.XFrameOptionsMiddleware'
-)
+# Use default middlewares. uncomment if adding whitenoise back in
+# MIDDLEWARE = (
+#     'django.middleware.security.SecurityMiddleware', 'whitenoise.middleware.WhiteNoiseMiddleware', 'core.middleware.TooBusyMiddleware', 'django.middleware.http.ConditionalGetMiddleware', 'django.contrib.sessions.middleware.SessionMiddleware', 'django.middleware.common.CommonMiddleware', 'django.middleware.csrf.CsrfViewMiddleware', 'django.contrib.messages.middleware.MessageMiddleware', 'django.middleware.clickjacking.XFrameOptionsMiddleware'
+# )
 
 if url.scheme == 'https':
     """
