@@ -11,4 +11,7 @@ python manage.py create_collection
 python manage.py setup_index
 python manage.py migrate
 
+# copy static assets into the shared volume that the nginx-sidecar runs 
+cp -rf static/compiled data/word_coordinates/static
+
 gunicorn onisite.wsgi -b 0.0.0.0
