@@ -38,5 +38,13 @@
             "name": "Pennsylvania State University, Mont Alto Campus",
             "created": "1975-08-20T00:00:00+00:00"
         }
+    },
+    {
+        "pk": "pstde",
+        "model": "core.Awardee",
+        "fields": {
+            "name": "Pennsylvania State University, Deleware Campus",
+            "created": "1975-08-20T00:00:00+00:00"
+        }
     }
 ]
