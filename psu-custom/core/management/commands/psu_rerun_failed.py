@@ -1,18 +1,13 @@
 import os
 import logging
 
-from optparse import make_option
-from ssl import AlertDescription
-
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
 
 from django_q.tasks import async_task
 from django_q.models import Task
 
-from core.batch_loader import BatchLoader, BatchLoaderException
 from core.management.commands import configure_logging
-from core.models import Batch
     
 configure_logging('load_batch_logging.config', 
                   'load_batch_%s.log' % os.getpid())
