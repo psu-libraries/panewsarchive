@@ -10,7 +10,6 @@ jobs:
     environment:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       REGISTRY_REPO: library/panewsarchive
-      DOCKER_USERNAME: 'robot$circleci'
       GITHUB_USER: 'psu-stewardship-bot'
       CONFIG_REPO: git@github.com:psu-libraries/panewsarchive-config.git
     steps:
@@ -28,8 +27,6 @@ jobs:
     docker:
       - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
         user: root
-    environment:
-      DOCKER_LOGIN: 'robot$circleci'
     steps:
       - setup_remote_docker:
           version: 19.03.13
