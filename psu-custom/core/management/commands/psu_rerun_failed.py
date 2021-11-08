@@ -19,16 +19,6 @@ configure_logging('load_batch_logging.config',
 
 LOGGER = logging.getLogger(__name__)
 
-
-def load_batch(batch_path):
-    loader = BatchLoader(process_coordinates=True, process_ocr=True)
-    try:
-        batch = loader.load_batch(batch_path)
-    except BatchLoaderException as e:
-        LOGGER.exception(e)
-        raise CommandError("Batch load failed. See logs/load_batch_#.log")
-
-
 class Command(BaseCommand):
     help = """
     Looks at failed tasks, reruns the job, and removes the failed item from
