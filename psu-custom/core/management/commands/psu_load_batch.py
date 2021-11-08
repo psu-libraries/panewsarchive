@@ -37,9 +37,21 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         already_loaded_batches = [ b.name for b in Batch.objects.all() ]
-        batches  = [d for d in os.listdir('data/batches') if d.startswith("batch_") and d not in already_loaded_batches]
+        batches_env = os.getenv('BATCHES_ENV', 'dev')
+        batches_file = f"data/batches/batches-{batches_env}.txt"
+        if os.path.isfile(batches_file):
+            with open(batches_file, 'r') as f:
+                batches = [line.strip() for line in f.readlines() if line.strip()]
+        else:
+            raise ValueError(f"file {batches_file} does not exist")
 
-        for batch in batches:
-            LOGGER.info(f"loading batch {batch}")
-            batch_path = "/open-oni/data/batches/" + batch
-            async_task("core.management.commands.load_batch_async.load_batch", batch_path)
+        batches_to_load = [batch for batch in batches if batch not in already_loaded_batches]
+        LOGGER.info(f"found {len(batches_to_load)} batches to load")
+
+        for batch in batches_to_load:
+            batch_path = f"/open-oni/data/batches/{batch}"
+            if os.path.isdir(batch_path):
+                LOGGER.info(f"loading batch {batch}")
+                async_task("core.management.commands.load_batch_async.load_batch", batch_path)
+            else:
+                LOGGER.info(f"batch {batch} not found")
