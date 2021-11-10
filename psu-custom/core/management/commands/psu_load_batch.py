@@ -43,10 +43,7 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        successful_tasks = Task.objects.filter(success=True)
-        already_loaded_batches = [
-            s.args[0].rstrip("/").split("/")[-1] for s in successful_tasks
-        ]
+        already_loaded_batches = [ b.name for b in Batch.objects.all() ]
         batches_env = os.getenv("BATCHES_ENV", "dev")
         batches_file = f"data/batches/batches-{batches_env}.txt"
         if os.path.isfile(batches_file):
