@@ -33,7 +33,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    command:
+    - /open-oni/dc-local.sh
     volumes:
+      - ./bin/dc-local.sh:/open-oni/dc-local.sh
       - ./open-oni:/open-oni
       - ./config/settings_local.py:/open-oni/onisite/settings_local.py
       - ./data/batches:/open-oni/data/batches
