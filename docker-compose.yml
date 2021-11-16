@@ -37,9 +37,10 @@ services:
     - /open-oni/dc-local.sh
     volumes:
       - ./bin/dc-local.sh:/open-oni/dc-local.sh
-      - ./open-oni:/open-oni
-      - ./config/settings_local.py:/open-oni/onisite/settings_local.py
+      - ${PWD}/config/urls.py:/open-oni/onisite/urls.py
+      - ${PWD}/config/settings_local.py:/open-oni/onisite/settings_local.py
       - ./data/batches:/open-oni/data/batches
+      - ./open-oni:/open-oni
     ports:
       - "${HTTPPORT:-8081}:8000"
     depends_on:
