@@ -2,7 +2,7 @@
     http://BASE_URL/lccn/sn83045350/1878-01-03/ed-1/seq-1/ -->
 
 {% extends "__l_main.html" %}
-{% load static from staticfiles %}
+{% load static %}
 {% load image_urls %}
 
 {% block head_item_metadata %}
@@ -152,7 +152,7 @@
 {{ block.super }}
 
     <div id="page_data"
-	 data-static_url="{% static '' %}images/"
+   data-static_url="{{ static_url }}vendor/openseadragon/images/"
    data-iiif_id="{% iiif_info page %}/info.json"
 	 data-width="{{page.jp2_width}}"
 	 data-height="{{page.jp2_length}}"
@@ -161,7 +161,7 @@
 	 data-navigation_url="{% url 'openoni_search_pages_navigation' %}?"
 	 ></div>
 
-    <script type="text/javascript" src="{% static 'vendor/openseadragon/javascripts/openseadragon.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'vendor/openseadragon/openseadragon.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
 
     <noscript><!-- without javascript the pageviewer does not work; display OCR in this case instead. -->
