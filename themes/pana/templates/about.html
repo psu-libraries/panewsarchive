@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block main_content %}
+<!--<h2>This content was moved.</h2><-->
 
  <div id="std_box">
   <p>Information about Pennsylvania's participation in the <a href = "http://www.loc.gov/ndnp/">National Digital Newspaper Program</a></p>
@@ -160,7 +161,7 @@ this specific pattern.</p>
     first available page from first edition, January 5, 1900 as an IIIF Canvas</li>
     <li><a href="/newspapers.json">{{BASE_URL}}/newspapers.json</a><br>
     a list of all newspaper titles for which there is digital content represented as a IIIF Collection</li>
-    <li><a href="{% url "openoni_batches_json" %}">{% url "openoni_batches_json" %}</a><br>
+    <li><a href="{% url "openoni_batches_json" %}">{{BASE_URL}}{% url "openoni_batches_json" %}</a><br>
     a list of all batches of content that have been loaded</li>
     <li><a href="{{ batch.json_url }}">{{BASE_URL}}{{ batch.json_url }}</a><br>
     detailed information about a specific batch as a IIIF Collection</li>

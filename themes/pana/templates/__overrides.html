@@ -24,10 +24,25 @@
   <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
 
   <!-- Local CSS -->
-  <link href="{% static 'css/highlights.css' %}" rel="stylesheet" media="screen">
   <link href="{% static 'css/tablesort.css' %}" rel="stylesheet" media="screen">
-  <!--link href="{% static 'css/main.css' %}" rel="stylesheet" media="screen"-->
   <link href="{% static 'css/panews.css' %}" rel="stylesheet" media="screen">
+
+<!-- Matomo -->
+<script type="text/javascript">
+  var _paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="https://analytics.libraries.psu.edu/matomo/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '4']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+
 {% endblock head_page_css %}
 
 <!-- Other Options -->
@@ -105,7 +120,7 @@ head_all
                 <!--{% block navbar_pos3 %}<li><a href="{% url 'openoni_about_api' %}">API</a></li>{% endblock navbar_pos3 %}-->
                 {% block navbar_pos4 %}<li><a href="{% url 'openoni_issues' %}">Browse by Date</a></li>{% endblock navbar_pos4 %}
                 {% block navbar_pos5 %}<li><a href="{% url 'openoni_help' %}">Help</a></li>{% endblock navbar_pos5 %}
-                {% block navbar_pos2 %}<li><a href="{% url 'openoni_about' %}">About</a></li>{% endblock navbar_pos2 %}
+                {% block navbar_pos2 %}<li><a href="https://libraries.psu.edu/about/collections/digital-newspapers/pennsylvania-newspaper-archive">About</a></li>{% endblock navbar_pos2 %}
               </ul>
 
               {% block navbar_advancedsearch %}
