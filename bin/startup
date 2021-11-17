@@ -12,6 +12,6 @@ python manage.py migrate
 python manage.py loaddata core/fixtures/psu_awardees.json
 
 # copy static assets into the shared volume that the nginx-sidecar runs 
-cp -rf static/compiled data/word_coordinates/static
+cp -rf static/compiled/* data/word_coordinates/static
 
 gunicorn onisite.wsgi -b 0.0.0.0
