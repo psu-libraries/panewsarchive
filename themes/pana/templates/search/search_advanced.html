@@ -1,0 +1,131 @@
+{% extends "__l_main.html" %}
+
+{% load static from staticfiles %}
+{% load humanize %}
+
+{% block head_page_css %}
+  {{ block.super }}
+  <link href="{% static 'css/search.css' %}" rel="stylesheet" media="screen">
+{% endblock head_page_css %}
+
+{% block subcontent %}
+
+<div class="page_search">
+    <form action="{% url 'openoni_search_pages_results' %}" method="get" name="fulltext2" id="fulltext2">
+        <h3>Search Terms</h2>
+        <div class="row">
+            <div class="col-md-3">
+                <label for="id_proxtext">{{ form.proxtext.label }}</label>
+            </div>
+            <div class="col-md-9">
+                {{ form.proxtext }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label for="id_ortext">{{ form.ortext.label }}</label>
+            </div>
+            <div class="col-md-9">
+                {{ form.ortext }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label for="id_andtext">{{ form.andtext.label }}</label>
+            </div>
+            <div class="col-md-9">
+                {{ form.andtext }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <label for="id_phrasetext">{{ form.phrasetext.label }}</label>
+            </div>
+            <div class="col-md-9">
+                {{ form.phrasetext }}
+            </div>
+        </div>
+        {% comment %} 
+            TODO put phrase searching hints here
+            <h4>Show Search Examples</h4>
+            <p>
+                Phrase searching: Add " " around phrase
+                Exclude a word: -word
+            </p>
+        {% endcomment %}
+
+        <h3>Limit By:</h3>
+        <!-- Locations and Dates -->
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.city }}
+                {{ form.county }}
+
+                {% block search_state_field %}
+                {% endblock search_state_field %}
+
+            </div>
+            <div class="col-md-6">
+                <p>Site contains content from {{ form.fulltextStartYear }} to {{ form.fulltextEndYear }}</p>
+                <input type="hidden" name="dateFilterType" alt="dateFilterType" value="yearRange"/>
+                <div class="form-inline">
+                    <input id="id_date_from" name="date1" class="span2 form-control" 
+                        type="text" data-date-format="mm/dd/yyyy" 
+                        data-date="01-01-{{form.fulltextStartYear}}" 
+                        value="01/01/{{form.fulltextStartYear}}">
+
+                    <label for="id_date_to">to</label>
+
+                    <input id="id_date_to" name="date2" class="span2 form-control" 
+                        type="text" data-date-format="mm/dd/yyyy" 
+                        data-date="12-31-{{form.fulltextEndYear}}" 
+                        value="12/31/{{form.fulltextEndYear}}">
+                </div>
+            </div>
+        </div>
+        <!-- Newspapers / LCCNs -->
+        <h3>Search only the following newspapers:</h3>
+        <div class="row">
+            <p>Hold cmd to select more than one</p>
+            <div class="col-md-12">
+                {{ form.lccn }}
+            </div>
+        </div>
+
+        <!-- TODO make the below expandable / collapsible? -->
+        <h3>Additional Filters</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <label for="id_language">{{ form.language.label }}</label>
+                {{ form.language }}
+            </div>
+            <div class="col-md-4">
+                <label for="id_frequency">{{ form.frequency.label }}</label>
+                {{ form.frequency }}
+            </div>
+            <div class="col-md-2">
+                <label for="id_sequence">{{ form.sequence.label }}</label>
+                {{ form.sequence }}
+            </div>
+            <div class="col-md-2">
+		&nbsp;
+            </div>
+        </div>
+        {% comment %}
+            Ethnicity, labor press, and material type not
+            included as they are not in solr index
+        {% endcomment %}
+        
+        <div class="row">
+            <input type="hidden" name="rows" id="rows" value="20" />
+            <input type="hidden" name="searchType" value="advanced" />
+            <div class="form-actions">
+                <button id="adv_reset" type="reset" value="clear" class="btn">Clear</button>
+                <button type="submit" value="Submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>
+</div><!-- end id:tab_advanced_search -->
+
+
+{% endblock subcontent %}

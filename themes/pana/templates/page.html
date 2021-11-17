@@ -1,0 +1,171 @@
+<!-- Individual page view, e.g.:
+    http://BASE_URL/lccn/sn83045350/1878-01-03/ed-1/seq-1/ -->
+
+{% extends "__l_main.html" %}
+{% load static from staticfiles %}
+{% load image_urls %}
+
+{% block head_item_metadata %}
+
+    {{ block.super }}
+
+    {% with page as title_metadata %}
+      {% include "includes/lc_metadata.html" %}
+    {% endwith %}
+
+    <link rel="primaryTopic" href="{{ page.abstract_url }}" />
+    <link rel="resourcemap" type="application/rdf+xml" href="{% url 'openoni_page_dot_rdf' page.issue.title.lccn page.issue.date_issued page.issue.edition page.sequence %}" />
+    <link rel="alternate" type="application/json" href="{% url 'openoni_page_dot_json' page.issue.title.lccn page.issue.date_issued page.issue.edition page.sequence %}" />
+    <link rel="alternate" type="image/jp2" href="{% url 'openoni_page_jp2' title.lccn issue.date_issued issue.edition page.sequence %}" />
+    <link rel="alternate" type="application/pdf" href="{% url 'openoni_page_pdf' title.lccn issue.date_issued issue.edition page.sequence %}" />
+    <link rel="alternate" type="application/xml" href="{% url 'openoni_page_ocr_xml' title.lccn issue.date_issued issue.edition page.sequence %}" />
+    <link rel="alternate" type="text/plain" href="{% url 'openoni_page_ocr_txt' title.lccn issue.date_issued issue.edition page.sequence %}" />
+    <link rel="canonical" href="{{BASE_URL}}{% url 'openoni_page' title.lccn issue.date_issued issue.edition page.sequence %}" />
+    <link rel="up" href="{{ issue.url }}" />
+    <link rel="up" href="{{ issue.batch.url }}" />
+    {% if page.reel.number %}<link rel="up" href="{% url 'openoni_reel' page.reel.number %}" />{% endif %}
+    <meta property="og:image" content="{% thumb_image_url page %}" />
+    <meta property="og:title" content="{{ page_title }}" />
+    <meta property="og:description" content="{{ page_title }}, brought to you by {{ image_credit }}, and the National Digital Newspaper Program." />
+
+{% endblock head_item_metadata %}
+
+{% block head_page_css %}
+
+    {{ block.super }}
+
+    <!-- Include css code for viewer -->
+    <link href="{% static 'css/viewer.css' %}" rel="stylesheet" />
+
+    <!-- This rule has to be inline or it does not work. All other single page viewer rules are in external css file linked above -->
+    <style type="text/css">
+      #dummy { /* for specifying aspect ratio of viewer_container */
+        padding-top:{% widthratio page.jp2_length page.jp2_width 100 %}%;
+      }
+    </style>
+
+{% endblock head_page_css %}
+
+
+{% block content %}
+
+
+<h2>{{ page_head_heading }}</h2>
+  <div class="btn-group" role="group" aria-label="title options">
+    {% if '/search/pages/results/' in request.META.HTTP_REFERER %}<a href="{{request.META.HTTP_REFERER}}" class="btn btn-default page_about" role="button" >Back to search results</a>{% endif %}
+    <a class="btn btn-default page_about" href="{% url 'openoni_title' title.lccn %}" role="button">About: {{page_head_subheading}}</a>
+    <a class="btn btn-default" href="../" role="button">View This Issue</a>           
+  </div><br /><br />
+  <!--{% if '/search/pages/results/' in request.META.HTTP_REFERER %}<a href="{{request.META.HTTP_REFERER}}">Back to search results</a> | {% endif %}<span class="page_about">About <a href="{% url 'openoni_title' title.lccn %}">{{page_head_subheading}}</a> | <a href="../">View This Issue</a></span>-->
+
+  <div id="item-wrapper"> 
+
+    <div id="imageViewer_nav">
+      <span id="item-ctrl" class="toolbar">
+      <!-- This is where the open seadragon controls are inserted via javascript -->
+      </span>
+      <span class="other_controls">
+        <span class="control">
+        {% if page.previous %}
+          <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+          <a href="{% url 'openoni_page' title.lccn issue.date_issued issue.edition page.previous.sequence %}">prev</a>
+        {% endif %}
+        Page: 
+        <select name="pageNum" id="pageNum" class="input-small">
+          {% for p in issue.pages.all %}
+            <option value="{% url 'openoni_page' title.lccn issue.date_issued issue.edition p.sequence %}" {% ifequal p.sequence page.sequence %}selected="selected"{% endifequal %}>{{p.sequence}}</option>
+          {% endfor %}
+        </select>
+        of {{issue.pages.all|length}}
+      {% if page.next %}
+        <a href="{% url 'openoni_page' title.lccn issue.date_issued issue.edition page.next.sequence %}">next</a>
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      {% endif %}
+    </span><!-- /control -->
+    <span class="control">
+      {% if previous_issue_first_page %}
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <a href="{% url 'openoni_page' title.lccn previous_issue_first_page.issue.date_issued previous_issue_first_page.issue.edition previous_issue_first_page.sequence %}">prev</a>
+      {% endif %}
+      Issue
+      {% if next_issue_first_page %}
+        <a href="{% url 'openoni_page' title.lccn next_issue_first_page.issue.date_issued next_issue_first_page.issue.edition next_issue_first_page.sequence %}">next</a>
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      {% endif %}
+    </span><!-- /control -->
+<!-- <span class="control">
+<strong><a href="{% url 'openoni_issue_pages' title.lccn issue.date_issued issue.edition %}">All Issues</a></strong>
+</span> -->
+{% if page.jp2_filename %}
+    <span class="control">
+      <a href="#">
+        <span class="glyphicon glyphicon-text-background" aria-hidden="true"></span>
+        <a href="{% url 'openoni_page_ocr' title.lccn issue.date_issued issue.edition page.sequence %}">Text</a>
+      </a>
+    </span><!-- /control -->
+    <span class="control">
+      <span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+      <a href="{% url 'openoni_page_pdf' title.lccn issue.date_issued issue.edition page.sequence %}">PDF</a>
+    </span><!-- /control -->
+    <span class="control">
+      <span class="glyphicon glyphicon-picture" aria-hidden="true"></span>
+      <a href="{% url 'openoni_page_jp2' title.lccn issue.date_issued issue.edition page.sequence %}" download="{{ title.lccn }}-{{ issue.date_issued|date:"Ymd" }}.jp2">JP2 ({{ image_size }})</a>
+    </span><!-- /control -->
+    <span class="control">
+      <span class="glyphicon glyphicon-scissors" aria-hidden="true"></span>
+      <a id="clip" href="#" target="print">Clip/Print Image</a>
+    </span><!-- /control -->
+    {% endif %}
+  </span><!-- /other_controls -->
+</div><!-- /imageViewer_nav -->
+
+
+{% if page.jp2_filename %}
+
+<div id="viewer_container_container">
+	<div id="dummy"></div>
+	<div id="viewer_container" class="openseadragon">
+	  <div id="item-ctrl" class="toolbar"></div>
+	</div>
+</div><!-- /viewer_container_container -->
+
+{% else %}
+
+<div class="missing">
+  <h3>Missing Page: {{explanation}}</h3>
+</div><!-- /missing -->
+
+{% endif %}
+
+</div><!-- /item_wrapper -->
+
+      {% if issue.copyright_link %}
+        <div class="item-foot">Copyright Statement:&nbsp;
+          <a href="{{issue.copyright_link.uri}}">{{issue.copyright_link.label}}</a>
+        </div>
+      {% endif %}
+      
+{% endblock content %}
+
+
+{% block javascript %}
+{{ block.super }}
+
+    <div id="page_data"
+	 data-static_url="{% static '' %}images/"
+   data-iiif_id="{% iiif_info page %}/info.json"
+	 data-width="{{page.jp2_width}}"
+	 data-height="{{page.jp2_length}}"
+	 data-page_url="{% url 'openoni_page' title.lccn issue.date_issued issue.edition page.sequence %}"
+	 data-coordinates_url="{% url 'openoni_page_coordinates' page.issue.title.lccn page.issue.date_issued page.issue.edition page.sequence %}"
+	 data-navigation_url="{% url 'openoni_search_pages_navigation' %}?"
+	 ></div>
+
+    <script type="text/javascript" src="{% static 'vendor/openseadragon/javascripts/openseadragon.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/page.js' %}"></script>
+
+    <noscript><!-- without javascript the pageviewer does not work; display OCR in this case instead. -->
+        <h3>Newspaper Page Text</h3>
+        <pre>{{ page.ocr.text }}</pre>
+    </noscript>
+{% endblock %}
