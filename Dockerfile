@@ -31,6 +31,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   rm -rf /var/lib/apt/lists/* 
 
 COPY bin/startup /usr/local/bin/startup
+COPY bin/migrate /usr/local/bin/migrate
 RUN chmod +x /usr/local/bin/startup
 
 USER app
@@ -48,6 +49,7 @@ RUN pip install --no-cache-dir -r psu-requirements.txt --user
 COPY --chown=app open-oni /open-oni
 COPY --chown=app config/settings_local.py /open-oni/onisite
 COPY --chown=app config/urls.py /open-oni/onisite
+COPY --chown=app config/gunicorn.conf.py /open-oni/gunicorn.conf.py
 COPY --chown=app themes /open-oni/themes
 
 ADD --chown=app psu-custom/ /open-oni
