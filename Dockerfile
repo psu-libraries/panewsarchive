@@ -33,6 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY bin/startup /usr/local/bin/startup
 COPY bin/migrate /usr/local/bin/migrate
 RUN chmod +x /usr/local/bin/startup
+RUN chmod +x /usr/local/bin/migrate
 
 USER app
 
