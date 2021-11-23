@@ -6,13 +6,4 @@ if [ -f /vault/secrets/config ]; then
   . /vault/secrets/config
 fi
 
-python manage.py create_collection
-python manage.py setup_index
-python manage.py migrate
-python manage.py loaddata core/fixtures/psu_awardees.json
-
-# copy static assets into the shared volume that the nginx-sidecar runs 
-mkdir -p data/word_coordinates/static
-cp -rf static/compiled/* data/word_coordinates/static
-
 gunicorn onisite.wsgi -b 0.0.0.0
