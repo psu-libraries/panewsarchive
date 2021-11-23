@@ -50,7 +50,6 @@ RUN pip install --no-cache-dir -r psu-requirements.txt --user
 COPY --chown=app open-oni /open-oni
 COPY --chown=app config/settings_local.py /open-oni/onisite
 COPY --chown=app config/urls.py /open-oni/onisite
-COPY --chown=app config/gunicorn.conf.py /open-oni/gunicorn.conf.py
 COPY --chown=app themes /open-oni/themes
 
 ADD --chown=app psu-custom/ /open-oni
