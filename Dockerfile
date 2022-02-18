@@ -21,11 +21,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   libmariadb-dev-compat=1:10.5.12-0+deb11u1 \
   libmariadb-dev=1:10.5.12-0+deb11u1 \
   libmariadb3=1:10.5.12-0+deb11u1 \
-  libpq-dev=13.4-0+deb11u1 \
-  libpq5=13.4-0+deb11u1 \
+  libpq-dev=13.5-0+deb11u1 \
+  libpq5=13.5-0+deb11u1 \
   libssl-dev=1.1.1k-1+deb11u1 \
   libssl1.1=1.1.1k-1+deb11u1 \
-  linux-libc-dev=5.10.70-1 \
+  linux-libc-dev=5.10.92-1 \
   mariadb-common=1:10.5.12-0+deb11u1 \
   openssl=1.1.1k-1+deb11u1 && \
   rm -rf /var/lib/apt/lists/* 
