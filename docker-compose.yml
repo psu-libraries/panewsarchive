@@ -41,6 +41,7 @@ services:
       - ${PWD}/config/settings_local.py:/open-oni/onisite/settings_local.py
       - ./data/batches:/open-oni/data/batches
       - ./open-oni:/open-oni
+      - ./themes/pana:/open-oni/themes/pana
     ports:
       - "${HTTPPORT:-8081}:8000"
     depends_on:
