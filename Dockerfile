@@ -7,27 +7,27 @@ RUN adduser app && \
   chown -R app /open-oni
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-  krb5-multidev=1.18.3-6+deb11u1 \
-  libapr1=1.7.0-6+deb11u1 \
-  libgssapi-krb5-2=1.18.3-6+deb11u1 \
-  libgssrpc4=1.18.3-6+deb11u1 \
-  libk5crypto3=1.18.3-6+deb11u1 \
-  libkadm5clnt-mit12=1.18.3-6+deb11u1 \
-  libkadm5srv-mit12=1.18.3-6+deb11u1 \
-  libkdb5-10=1.18.3-6+deb11u1 \
-  libkrb5-3=1.18.3-6+deb11u1 \
-  libkrb5-dev=1.18.3-6+deb11u1 \
-  libkrb5support0=1.18.3-6+deb11u1 \
-  libmariadb-dev-compat=1:10.5.12-0+deb11u1 \
-  libmariadb-dev=1:10.5.12-0+deb11u1 \
-  libmariadb3=1:10.5.12-0+deb11u1 \
-  libpq-dev=13.5-0+deb11u1 \
-  libpq5=13.5-0+deb11u1 \
-  libssl-dev=1.1.1k-1+deb11u1 \
-  libssl1.1=1.1.1k-1+deb11u1 \
-  linux-libc-dev=5.10.92-1 \
-  mariadb-common=1:10.5.12-0+deb11u1 \
-  openssl=1.1.1k-1+deb11u1 && \
+  krb5-multidev \
+  libapr1 \
+  libgssapi-krb5-2 \
+  libgssrpc4 \
+  libk5crypto3 \
+  libkadm5clnt-mit12 \
+  libkadm5srv-mit12 \
+  libkdb5-10 \
+  libkrb5-3 \
+  libkrb5-dev \
+  libkrb5support0 \
+  libmariadb-dev-compat \
+  libmariadb-dev \
+  libmariadb3 \
+  libpq-dev \
+  libpq5 \
+  libssl-dev \
+  libssl1.1 \
+  linux-libc-dev \
+  mariadb-common \
+  openssl && \
   rm -rf /var/lib/apt/lists/* 
 
 COPY bin/startup /usr/local/bin/startup
