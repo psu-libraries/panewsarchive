@@ -41,7 +41,7 @@ ENV PATH=$PATH:/home/app/.local/bin
 
 # Open-Oni Requirements
 COPY open-oni/requirements.lock /open-oni
-RUN pip install --no-cache-dir -r requirements.lock --user
+# RUN pip install --no-cache-dir -r requirements.lock --user
 
 # Our requirements on top of Open-Oni
 COPY psu-requirements.txt /open-oni
