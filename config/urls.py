@@ -5,7 +5,7 @@
 # These are currently set up in ONI in a way that, if changed, can cause the
 # application to be unable to find any of your OCR data!  (For details, see
 # https://github.com/open-oni/open-oni/issues/556)
-from django.conf.urls import url, include
+from django.urls import include, path, re_path
 
 # Django documentation recommends always using raw string syntax: r''
 urlpatterns = [
@@ -16,5 +16,5 @@ urlpatterns = [
   #url(r'', include("themes.(theme_name).urls")),
 
   # Open ONI URLs
-  url(r'', include("core.urls")),
+  re_path(r'', include("core.urls")),
 ]
