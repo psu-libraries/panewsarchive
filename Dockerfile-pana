@@ -1,10 +1,5 @@
-FROM harbor.k8s.libraries.psu.edu/library/pana:vanilla-dev
+FROM harbor.k8s.libraries.psu.edu/library/panewsarchive:45c5818dfeabd85fad54bef052e743c70e379bba
 
 # setup base code
-WORKDIR /opt/openoni
+WORKDIR /open-oni
 
-ADD themes/panews /opt/openoni/themes/.
-ADD requirements.pip /opt/openoni/requirements.pip
-
-EXPOSE 80
-ENTRYPOINT /entrypoint.sh

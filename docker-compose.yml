@@ -32,7 +32,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-pana
     command:
     - /open-oni/dc-local.sh
     volumes:
@@ -43,7 +43,7 @@ services:
       - ./open-oni:/open-oni
       - ./themes/pana:/open-oni/themes/pana
     ports:
-      - "${HTTPPORT:-8081}:8000"
+      - "${HTTPPORT:-8080}:8080"
     depends_on:
       - rdbms
     environment:
