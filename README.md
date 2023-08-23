@@ -2,6 +2,7 @@
 A repository for the local fork of the Open ONI project for PSU Deployment.
 
 
+# to run in docker compose
 
 cd panewsarchive/
 
@@ -11,4 +12,4 @@ git submodule update --recursive (if already pulled)
 
 docker-compose up --build
 
-change ports docker-compose.yml and dc-local.sh
+change ports in docker-compose.yml and dc-local.sh
