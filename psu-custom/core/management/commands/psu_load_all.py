@@ -33,8 +33,8 @@ class Command(BaseCommand):
 
         for batch in batches:
             LOGGER.info(f"loading batch {batch}")
-        #     batch_path = "/open-oni/data/batches/" + batch
-        #     call_command("load_batch", batch_path)
+            batch_path = "/open-oni/data/batches/" + batch
+            call_command("load_batch", batch_path)
 
 
 import os
