@@ -3,53 +3,11 @@ import logging
 
 from optparse import make_option
 from ssl import AlertDescription
-
-from django.core.management.base import BaseCommand
-from django.core.management.base import CommandError
-
-from core.batch_loader import BatchLoader, BatchLoaderException
-from core.management.commands import configure_logging
-from core.models import Batch
-
-configure_logging("load_batch_logging.config", "load_batch_%s.log" % os.getpid())
-
-LOGGER = logging.getLogger(__name__)
-
-
-class Command(BaseCommand):
-    help = """
-    This command loads the metadata and pages associated with a batch into a
-    database and search index. It may take up to several hours to complete,
-    depending on the batch size and machine.
-    """
-
-    def handle(self, *args, **options):
-        already_loaded_batches = [b.name for b in Batch.objects.all()]
-        batches = [
-            d
-            for d in os.listdir("data/batches")
-            if d.startswith("batch_") and d not in already_loaded_batches
-        ]
-
-        for batch in batches:
-            LOGGER.info(f"loading batch {batch}")
-            batch_path = "/open-oni/data/batches/" + batch
-            call_command("load_batch", batch_path)
-
-
-import os
-import logging
-
-from optparse import make_option
-from ssl import AlertDescription
 from lxml import etree
 
 from django.core.management.base import BaseCommand
 from django.core.management.base import CommandError
 from django.core.management import call_command
-
-from django_q.tasks import async_task
-from django_q.models import Task
 
 from core.batch_loader import BatchLoader, BatchLoaderException
 from core.management.commands import configure_logging
