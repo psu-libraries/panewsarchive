@@ -72,4 +72,5 @@ class Command(BaseCommand):
                 LOGGER.error(f"batch {batch} not found")
 
         # since we skip index of titles above, we index here
-        # call_command("index_titles")
+        if len(batches_to_load) > 0:
+          call_command("index_titles")
