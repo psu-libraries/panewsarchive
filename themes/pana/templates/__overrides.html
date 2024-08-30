@@ -52,13 +52,12 @@
 <div id="footer">
         <div class="container">
           <h2>{{site_title}}</h2>
-		  <p>For questions about content, please contact <a href="mailto:lsk3@psu.edu">Sue Kellerman</a>, Judith O. Sieg Librarian for Preservation and former PI of the PA Newspaper Project and the PA
-			  Digital Newspaper Project. For technical or other issues, please contact <a href="mailto:andrew@psu.edu">Andrew Gearhart</a> or <a href="mailto:jak47@psu.edu">Jeff Knapp</a>, Larry and
-			  Ellen Foster Communications Librarian.
-		  </p>
-		  <p>
-			  Site created using <a href="https://github.com/open-oni/open-oni">open-oni</a> software, built off the Library of Congress's <a href="https://github.com/LibraryofCongress/chronam">chronam</a>.		</p>
-		  <p><a href = "https://libraries.psu.edu/accessibility-help">Accessibility Help</a></p>
+      <p>
+        For questions about content and participation in the PA Newspaper Archive, please contact the <a href="mailto:ul-preservation-unit@lists.psu.edu">Preservation, Conservative and Digitization department.</a>
+      </p>
+      <p>
+        Site created using <a href="https://github.com/open-oni/open-oni">open-oni</a> software, built off the Library of Congress's <a href="https://github.com/LibraryofCongress/chronam">chronam</a>.		</p>
+      <p><a href = "https://libraries.psu.edu/accessibility-help">Accessibility Help</a></p>
         </div><!-- /container -->
 </div><!-- /footer -->
 
@@ -128,7 +127,7 @@ head_all
                 <li class="nav_advanced_search"><a href="{% url 'openoni_search_advanced' %}">Advanced Search</a></li>
               </ul>
               {% endblock navbar_advancedsearch %}
-            
+
               {% block navbar_search %}
               <form class="form-inline navbar-form navbar-right"  action="{% url 'openoni_search_pages_results' %}" method="get">
                 <div class="form-group">
