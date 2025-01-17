@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  docker: circleci/docker@2.2.0
+  docker: circleci/docker@2.6.0
 
 jobs:
   release:
@@ -29,7 +29,6 @@ jobs:
         user: root
     steps:
       - setup_remote_docker:
-          version: 20.10.24
           docker_layer_caching: true
       - checkout
       - run: git submodule sync
