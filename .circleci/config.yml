@@ -143,8 +143,12 @@ jobs:
     steps:
       - setup_remote_docker:
           docker_layer_caching: true
-      - run: git submodule sync --recursive
-      - run: git submodule update --init --recursive
+      - checkout
+      - run:
+          name: Pull git submodules
+          command: |
+            git submodule sync --recursive
+            git submodule update --init --recursive
       - compute-docker-tag
       - docker/check:
           registry: $REGISTRY_HOST
