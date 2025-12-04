@@ -22,7 +22,7 @@ parameters:
     default: "v4.3.0"
   CONFIG_REPO_NAME:
     type: string
-    default: "catalog-config"
+    default: "panewsarchive-config"
   CONFIG_REPO_URL:
     type: string
     default: "git@github.com:psu-libraries/panewsarchive-config.git"
