@@ -132,6 +132,42 @@ jobs:
   #           cd panewsarchive-config
   #           /usr/local/bin/pr-release clusters/prod/manifests/panewsarchive/prod.yaml
 
+  build-image:
+    environment:
+      REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
+      REGISTRY_REPO: "library/$CIRCLE_PROJECT_REPONAME"
+    executor:
+      name: ci-utils
+      image_tag: << pipeline.parameters.CI_UTILS_IMAGE_TAG >>  
+      registry_host: << pipeline.parameters.REGISTRY_HOST >>
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - checkout
+      - compute-docker-tag
+      - docker/check:
+          registry: $REGISTRY_HOST
+      - docker/build:
+          image: $REGISTRY_REPO
+          registry: $REGISTRY_HOST
+          tag: $TAG
+          extra_build_args: "--target production"
+          use-buildkit: true
+      - run:
+          name: Save Docker image
+          command: |
+            docker save $REGISTRY_HOST/library/$CIRCLE_PROJECT_REPONAME:$TAG -o /tmp/docker-image.tar
+      - run:
+          name: Save image info for push job
+          command: |
+            mkdir -p /tmp/docker-image-info
+            echo "$REGISTRY_HOST/library/$CIRCLE_PROJECT_REPONAME:$TAG" > /tmp/docker-image-info/image-name.txt
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - docker-image.tar
+            - docker-image-info
+
   push-image:
     environment:
       REGISTRY_HOST: << pipeline.parameters.REGISTRY_HOST >>
@@ -244,6 +280,17 @@ workflows:
             branches:
               ignore:
                 - /.*/
+
+      - build-image:
+          name: build-image
+          context:
+            - org-global
+          filters:
+            branches:
+              only:
+                - main
+                - /preview\/.*/
+                                
       - push-image:
           context:
             - org-global
@@ -253,6 +300,8 @@ workflows:
                 - main
                 - docker-fixes
                 - /preview\/.*/
+          requires:
+            - build-image      
       - deploy-application:
           clusters: << pipeline.parameters.CLUSTERS_DEV >>          
           context:
