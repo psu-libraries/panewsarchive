@@ -113,25 +113,7 @@ jobs:
               export TARGET_CLUSTER="$cluster"
               echo "Processing cluster: $TARGET_CLUSTER"
               /usr/local/bin/image-release-pr "clusters/$TARGET_CLUSTER/manifests/$CIRCLE_PROJECT_REPONAME/prod.yaml"
-            done          
-  # release:
-  #   docker:
-  #     - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
-  #   environment:
-  #     REGISTRY_HOST: harbor.k8s.libraries.psu.edu
-  #     REGISTRY_REPO: library/panewsarchive
-  #     GITHUB_USER: 'psu-stewardship-bot'
-  #     CONFIG_REPO: git@github.com:psu-libraries/panewsarchive-config.git
-  #   steps:
-  #     - add_ssh_keys
-  #     - run:
-  #         name: "Release"
-  #         command: |
-  #           /usr/local/bin/tag-image
-  #           ssh-keyscan github.com > ~/.ssh/known_hosts
-  #           git clone $CONFIG_REPO
-  #           cd panewsarchive-config
-  #           /usr/local/bin/pr-release clusters/prod/manifests/panewsarchive/prod.yaml
+            done
 
   build-image:
     environment:
@@ -198,29 +180,7 @@ jobs:
           image: $REGISTRY_REPO
           registry: $REGISTRY_HOST
           tag: $TAG        
-  # publish:
-  #   docker:
-  #     - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
-  #       user: root
-  #   steps:
-  #     - setup_remote_docker:
-  #         docker_layer_caching: true
-  #     - checkout
-  #     - run: git submodule sync
-  #     - run: git submodule update --init
-  #     - docker/check:
-  #         registry: harbor.k8s.libraries.psu.edu
-  #     - docker/build:
-  #         image: library/panewsarchive
-  #         registry: harbor.k8s.libraries.psu.edu
-  #     - docker/push:
-  #         digest-path: /tmp/digest.txt
-  #         image: library/panewsarchive
-  #         registry: harbor.k8s.libraries.psu.edu
-  #     - run:
-  #         command: |
-  #           echo "Digest is: $(</tmp/digest.txt)"
-            
+          
   deploy-application:
     executor:
       name: ci-utils
@@ -251,21 +211,7 @@ jobs:
                 ./bin/ci-write-manifest
                 echo "Finished processing $TARGET_CLUSTER"
                 git status
-            done  
-  # deploy:
-  #   docker:
-  #     - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
-  #   environment:
-  #     CONFIG_REPO: git@github.com:psu-libraries/panewsarchive-config.git
-  #   steps:
-  #     - add_ssh_keys
-  #     - run:
-  #         name: "Updating Config Repo"
-  #         command: |
-  #           ssh-keyscan github.com > ~/.ssh/known_hosts
-  #           git clone $CONFIG_REPO
-  #           cd panewsarchive-config
-  #           ./bin/generate_app
+            done 
 
 workflows:
   version: 2
