@@ -13,6 +13,27 @@
   there is no need to alter "__base.html" nor to duplicate it in new themes.
 {% endcomment %}
 
+<!-- Google Tag Manager: head_all opens <head>, body_content opens <body> -->
+
+{% block head_all %}
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KCXL2VQQ');</script>
+<!-- End Google Tag Manager -->
+{{ block.super }}
+{% endblock head_all %}
+
+{% block body_content %}
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KCXL2VQQ"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+{{ block.super }}
+{% endblock body_content %}
+
 <!-- Page Title -->
 
 {% block head_page_title %}
@@ -26,22 +47,6 @@
   <!-- Local CSS -->
   <link href="{% static 'css/tablesort.css' %}" rel="stylesheet" media="screen">
   <link href="{% static 'css/panews.css' %}" rel="stylesheet" media="screen">
-
-<!-- Matomo -->
-<script type="text/javascript">
-  var _paq = window._paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="https://analytics.libraries.psu.edu/matomo/";
-    _paq.push(['setTrackerUrl', u+'piwik.php']);
-    _paq.push(['setSiteId', '4']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-  })();
-</script>
-<!-- End Matomo Code -->
 
 {% endblock head_page_css %}
 
