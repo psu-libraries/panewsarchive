@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/pana:vanilla-dev
+FROM harbor.libraries.psu.edu/library/pana:vanilla-dev
 
 # setup base code
 WORKDIR /opt/openoni
